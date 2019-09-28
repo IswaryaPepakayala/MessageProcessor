@@ -8,18 +8,27 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.jpmc.exceptions.InvalidMessageTypeException;
+import com.jpmc.exceptions.InvalidOperationException;
+import com.jpmc.exceptions.TechnicalFailureException;
 import com.jpmc.model.SaleMessageVO;
+import com.jpmc.service.StoreSalesMessage;
 import com.jpmc.service.impl.StoreSalesMessagesImpl;;
 
 public class MessageProcessor {
 
 	private static MessageProcessor messageProcessor = new MessageProcessor();
-	private StoreSalesMessagesImpl storeSalesMessages;
+	private StoreSalesMessage storeSalesMessages = new StoreSalesMessagesImpl();;
 
-	private MessageProcessor() {
-		this.storeSalesMessages = new StoreSalesMessagesImpl();
+	private static final Logger logger = LogManager.getLogger(MessageProcessor.class);
+
+	public MessageProcessor() {
 	}
 
 	public static MessageProcessor getMessageProcessor() {
@@ -35,14 +44,15 @@ public class MessageProcessor {
 	public List<SaleMessageVO> parse(String salesMessageFile) {
 		List<SaleMessageVO> saleMessage = null;
 		ObjectMapper mapper = new ObjectMapper();
-
 		try {
+			logger.info("Converting Json to Java Objects");
 			saleMessage = mapper.readValue(new File(salesMessageFile), new TypeReference<List<SaleMessageVO>>() {
 			});
-		} catch (IOException e) {
+		} catch (InvalidFormatException e) {
+			logger.error("Invalid Format in the JSON please check.");
+		}catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		return saleMessage;
 	}
 
@@ -54,34 +64,40 @@ public class MessageProcessor {
 	 * @param saleMessages
 	 * @return boolean
 	 */
-	public boolean process(List<SaleMessageVO> saleMessages) {
+	public boolean process(List<SaleMessageVO> saleMessages)
+			throws InvalidMessageTypeException, InvalidOperationException {
+
 		AtomicInteger counter = new AtomicInteger(0);
 		StringBuilder adjustmentsLog = new StringBuilder();
 
 		saleMessages.stream().forEach(saleMessage -> {
+			try {
+				storeSalesMessages.updateStore(saleMessage);
+				counter.getAndIncrement();
+				if (ADJUSTMENT.equals(saleMessage.getMessageType())) {
+					printAdjustmentLog(saleMessage, adjustmentsLog);
+				}
 
-			storeSalesMessages.updateStore(saleMessage);
-			counter.getAndIncrement();
+				if (counter.get() % 10 == 0) {
+					logger.info("\n------- 10 Sales Processed Record ------");
+					storeSalesMessages.printSalesReport();
+				}
 
-			if (ADJUSTMENT.equals(saleMessage.getMessageType())) {
-				printAdjustmentLog(saleMessage, adjustmentsLog);
-			}
-
-			if (counter.get() % 10 == 0) {
-				System.out.println("\n------- 10 Sales Processed Record ------");
-				storeSalesMessages.printSalesReport();
-			}
-
-			if (counter.get() == MESSAGE_CAPACITY) {
-				System.out.println("\nThe processing capacity is only a total of " + MESSAGE_CAPACITY
-						+ " messages. Processing stopped.");
-				return;
+				if (counter.get() == MESSAGE_CAPACITY) {
+					System.out.println("\nThe processing capacity is only a total of " + MESSAGE_CAPACITY
+							+ " messages. Processing stopped.");
+					return;
+				}
+			} catch (InvalidMessageTypeException | InvalidOperationException e) {
+				logger.error("Invalid Message is available in json object");
+			} catch (TechnicalFailureException e) {
+				logger.error("Technical Error Message. Please contact adminstrator");
 			}
 
 		});
 
 		if (adjustmentsLog.length() != 0) {
-			System.out.println("\n---- Adjustment Log ---");
+			logger.info("\n---- Adjustment Log ---");
 			System.out.println(adjustmentsLog.toString());
 		}
 

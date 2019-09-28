@@ -6,7 +6,16 @@ public class SaleVO {
 	private String productType;
     private BigDecimal sellingPrice;
     
-    
+	public SaleVO() {
+		super();
+	}
+	
+	public SaleVO(String productType, BigDecimal sellingPrice) {
+		super();
+		this.productType = productType;
+		this.sellingPrice = sellingPrice;
+	}
+
 	public String getProductType() {
 		return productType;
 	}

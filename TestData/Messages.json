@@ -12,7 +12,7 @@
 	    "productType":"apple",
 	    "sellingPrice":"30"
     },
-    "operationType":"ADD"
+    "operationType":"HI"
   },
   {
     "messageType":"saleMessage",

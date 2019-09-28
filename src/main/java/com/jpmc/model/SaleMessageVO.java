@@ -9,7 +9,16 @@ public class SaleMessageVO {
     private int saleCount;
     private OperationType operationType;
     
-    
+    public SaleMessageVO() {
+    	
+    }
+	public SaleMessageVO(String messageType, SaleVO sale, int saleCount, OperationType operationType) {
+		super();
+		this.messageType = messageType;
+		this.sale = sale;
+		this.saleCount = saleCount;
+		this.operationType = operationType;
+	}
 	public String getMessageType() {
 		return messageType;
 	}

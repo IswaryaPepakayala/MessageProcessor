@@ -1,6 +1,8 @@
 package com.jpmc.service.impl;
 
 import static com.jpmc.utility.Constants.ADJUSTMENT;
+import static com.jpmc.utility.Constants.INVALID_MESSAGE_TYPE;
+import static com.jpmc.utility.Constants.INVALID_OPERATION_TYPE;
 import static com.jpmc.utility.Constants.MESSAGE;
 import static com.jpmc.utility.Constants.SALE;
 
@@ -10,6 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jpmc.exceptions.InvalidMessageTypeException;
+import com.jpmc.exceptions.InvalidOperationException;
+import com.jpmc.exceptions.TechnicalFailureException;
 import com.jpmc.model.SaleMessageVO;
 import com.jpmc.model.Transaction;
 import com.jpmc.service.StoreSalesMessage;
@@ -32,7 +37,9 @@ public class StoreSalesMessagesImpl implements StoreSalesMessage {
 	 * 
 	 * @param saleMessage return boolean
 	 */
-	public boolean updateStore(SaleMessageVO saleMessage) {
+	public boolean updateStore(SaleMessageVO saleMessage)
+			throws InvalidMessageTypeException, InvalidOperationException, TechnicalFailureException {
+
 		if (saleMessage == null || saleMessage.getSale() == null) {
 			System.out.println("Invalid message");
 			return false;
@@ -56,8 +63,8 @@ public class StoreSalesMessagesImpl implements StoreSalesMessage {
 			transactions.add(new Transaction(saleMessage.getSale().getSellingPrice()));
 			break;
 		default:
-			System.out.println("Invalid operation");
-			break;
+			// System.out.println("Invalid operation");
+			throw new InvalidMessageTypeException(INVALID_MESSAGE_TYPE);
 
 		}
 
@@ -68,6 +75,7 @@ public class StoreSalesMessagesImpl implements StoreSalesMessage {
 		}
 
 		productTransactionStore.put(saleMessage.getSale().getProductType(), transactions);
+
 		return true;
 	}
 
@@ -78,8 +86,10 @@ public class StoreSalesMessagesImpl implements StoreSalesMessage {
 	 * @param transactions
 	 * @param saleMessage
 	 * @return
+	 * @throws InvalidOperationException
 	 */
-	private List<Transaction> adjustSaleTransactions(List<Transaction> transactions, SaleMessageVO saleMessage) {
+	private List<Transaction> adjustSaleTransactions(List<Transaction> transactions, SaleMessageVO saleMessage)
+			throws InvalidOperationException {
 		OperationType operationType = saleMessage.getOperationType();
 
 		switch (operationType) {
@@ -101,8 +111,7 @@ public class StoreSalesMessagesImpl implements StoreSalesMessage {
 			}
 			break;
 		default:
-			System.out.println("Invalid operation");
-			break;
+			throw new InvalidOperationException(INVALID_OPERATION_TYPE);
 		}
 
 		return transactions;
@@ -155,6 +164,10 @@ public class StoreSalesMessagesImpl implements StoreSalesMessage {
 		}
 
 		return revenueGenerated;
+	}
+
+	public void setStrore(Map<String, List<Transaction>> productTransactionStore) {
+		this.productTransactionStore = productTransactionStore;
 	}
 
 }

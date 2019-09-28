@@ -1,0 +1,39 @@
+2019-09-28 08:54:11 [main] ERROR MessageProcessor:89 - Invalid Message
+2019-09-28 08:54:11 [main] INFO  MessageProcessor:79 - 
+------- 10 Sales Processed Record ------
+2019-09-28 09:01:52 [main] INFO  MessageProcessor:48 - ------- Converting Json to Java Objects------
+2019-09-28 09:01:52 [main] ERROR MessageProcessor:90 - Invalid Message
+2019-09-28 09:01:52 [main] INFO  MessageProcessor:80 - 
+------- 10 Sales Processed Record ------
+2019-09-28 09:01:52 [main] INFO  MessageProcessor:98 - 
+---- Adjustment Log ---
+2019-09-28 09:05:53 [main] INFO  MessageProcessor:48 - Converting Json to Java Objects
+2019-09-28 09:05:53 [main] ERROR MessageProcessor:90 - Invalid Message
+2019-09-28 09:05:53 [main] INFO  MessageProcessor:80 - 
+------- 10 Sales Processed Record ------
+2019-09-28 09:05:53 [main] INFO  StoreSalesMessagesImpl:158 - Starting report generating
+2019-09-28 09:05:53 [main] INFO  MessageProcessor:98 - 
+---- Adjustment Log ---
+2019-09-28 09:15:54 [main] INFO  MessageProcessor:47 - Converting Json to Java Objects
+2019-09-28 09:15:54 [main] INFO  Main:31 - Sale messages parsing failed.
+2019-09-28 09:16:53 [main] INFO  MessageProcessor:47 - Converting Json to Java Objects
+2019-09-28 09:16:53 [main] ERROR MessageProcessor:90 - Invalid Message
+2019-09-28 09:16:53 [main] ERROR MessageProcessor:90 - Invalid Message
+2019-09-28 09:16:53 [main] INFO  MessageProcessor:80 - 
+------- 10 Sales Processed Record ------
+2019-09-28 09:16:53 [main] INFO  MessageProcessor:98 - 
+---- Adjustment Log ---
+2019-09-28 09:35:37 [main] ERROR MessageProcessor:90 - Invalid Message is available in json object
+2019-09-28 09:35:58 [main] ERROR MessageProcessor:90 - Invalid Message is available in json object
+2019-09-28 09:36:43 [main] ERROR MessageProcessor:90 - Invalid Message is available in json object
+2019-09-28 09:37:13 [main] ERROR MessageProcessor:90 - Invalid Message is available in json object
+2019-09-28 09:38:10 [main] ERROR MessageProcessor:90 - Invalid Message is available in json object
+2019-09-28 09:38:21 [main] INFO  MessageProcessor:47 - Converting Json to Java Objects
+2019-09-28 09:38:21 [main] INFO  Main:31 - Sale messages parsing failed.
+2019-09-28 09:40:56 [main] INFO  MessageProcessor:48 - Converting Json to Java Objects
+2019-09-28 09:40:56 [main] ERROR MessageProcessor:52 - Invalid Json Format
+2019-09-28 09:40:56 [main] INFO  Main:31 - Sale messages parsing failed.
+2019-09-28 09:41:50 [main] INFO  MessageProcessor:48 - Converting Json to Java Objects
+2019-09-28 09:41:50 [main] ERROR MessageProcessor:52 - Invalid Json Format
+2019-09-28 09:41:50 [main] INFO  Main:31 - Sale messages parsing failed.
+2019-09-28 09:41:50 [main] ERROR Main:42 - Given file path is incorrect or inaccessible. 
