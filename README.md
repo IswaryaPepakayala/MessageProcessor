@@ -10,6 +10,8 @@ For 50 records it will stop and generate a adjustment log as well.
 
 2.Add jackson-databind dependency in pom.xml
 
+3.Add Junit, Mockito and Log4j Jars
+
 # As per the probelm staement ,there are three input message types in JSON:
 
 1.Message(type 1) which has values productType and sellingPrice.
